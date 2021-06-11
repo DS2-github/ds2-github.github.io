@@ -26,60 +26,63 @@
       }
     }
 
-    async function loadShader(name) {
-      window.fetch(name)
-        .then(response => {
-          let src = response.text();
-          let shader;
-          if (name == "./fragment.txt") {
-            shader = gl.createShader(gl.FRAGMENT_SHADER);
-          } else if (name == "./vertex.txt") {
-            shader = gl.createShader(gl.VERTEX_SHADER);
-          }
-          else return null;
+    async function getShader(name) {
+      return new Promise((resolve, reject) => {
+        window.fetch(name)
+          .then(response => {
+            return response.text();
+          })
+          .then(script => {
+            let shader;
+            if (name == "./fragment.txt") {
+              shader = gl.createShader(gl.FRAGMENT_SHADER);
+            } else if (name == "./vertex.txt") {
+              shader = gl.createShader(gl.VERTEX_SHADER);
+            } else reject(shader);
 
-          gl.shaderSource(shader, src);
-          gl.compileShader(shader);
+            gl.shaderSource(shader, script);
+            gl.compileShader(shader);
 
-          if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            alert(gl.getShaderInfoLog(shader));
-            return null;
-          }
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+              alert(gl.getShaderInfoLog(shader));
+              reject(shader);
+            }
+            resolve(shader);
+          })
+      })
 
-          gl.attachShader(shaderProgram, shader);
-          return null;
-        })
     }
 
     var shaderProgram;
 
     async function initShaders() {
+      let shader_list = ["./fragment.txt", "./vertex.txt"];
+
       shaderProgram = gl.createProgram();
-      loadShader("./fragment.txt")
-        .finaly(() => {
-          loadShader("./vertex.txt")
-            .finaly(() => {
-              gl.linkProgram(shaderProgram);
-              if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-                alert("Could not initialise shaders");
-              }
+      let shader_requests = shader_list.map(name => getShader(name));
+      let list = await Promise.all(shader_requests);
+      for (let shd of list)
+        gl.attachShader(shaderProgram, shd);
 
-              gl.useProgram(shaderProgram);
+      gl.linkProgram(shaderProgram);
 
-              shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-              gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert("Could not initialise shaders");
+      }
 
-              shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-              shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-              shaderProgram.iterationUniform = gl.getUniformLocation(shaderProgram, "iteration");
-              shaderProgram.movexUniform = gl.getUniformLocation(shaderProgram, "movex");
-              shaderProgram.moveyUniform = gl.getUniformLocation(shaderProgram, "movey");
-              shaderProgram.zoomUniform = gl.getUniformLocation(shaderProgram, "zoom");
-              shaderProgram.posxUniform = gl.getUniformLocation(shaderProgram, "posx");
-              shaderProgram.posyUniform = gl.getUniformLocation(shaderProgram, "posy");
-              resolve(1);
-            })
-        })
+      gl.useProgram(shaderProgram);
+
+      shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+      gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+      shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+      shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+      shaderProgram.iterationUniform = gl.getUniformLocation(shaderProgram, "iteration");
+      shaderProgram.movexUniform = gl.getUniformLocation(shaderProgram, "movex");
+      shaderProgram.moveyUniform = gl.getUniformLocation(shaderProgram, "movey");
+      shaderProgram.zoomUniform = gl.getUniformLocation(shaderProgram, "zoom");
+      shaderProgram.posxUniform = gl.getUniformLocation(shaderProgram, "posx");
+      shaderProgram.posyUniform = gl.getUniformLocation(shaderProgram, "posy");
     }
 
 
@@ -137,7 +140,6 @@
 
 
     function webGLStart() {
-      // default cell width
       checkers_iteration = 1;
       move_x = 0;
       move_y = 0;
@@ -149,15 +151,13 @@
       var canvas = document.getElementById("wegl-canvas");
       initGL(canvas);
       initShaders()
-        .then(is_ok => {
-          initBuffers();
+      initBuffers();
 
-          gl.clearColor(0.0, 0.0, 0.0, 1.0);
-          gl.enable(gl.DEPTH_TEST);
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
+      gl.enable(gl.DEPTH_TEST);
 
-          drawScene();
-          tick();
-        })
+      drawScene();
+      tick();
     }
 
     function update_checkers_iteration() {
@@ -165,7 +165,6 @@
       checkers_iteration = parseInt(data);
       if (isNaN(checkers_iteration))
         checkers_iteration = 1;
-      //alert(data);
     }
     function update_up_checkers_iteration() {
       data = document.getElementById('input_checkers_iteration').value;
