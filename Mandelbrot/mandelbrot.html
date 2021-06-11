@@ -27,7 +27,8 @@
     }
 
     function getShader(gl, name) {
-      window.fetch(name,
+      window.fetch("./" + name,
+        { mode: 'cors' }
       )
         .then(response => {
           if (!response.ok) {
@@ -41,14 +42,6 @@
             return null;
           }
 
-          var str = "";
-          var k = shaderScript.firstChild;
-          while (k) {
-            if (k.nodeType == 3) {
-              str += k.textContent;
-            }
-            k = k.nextSibling;
-          }
           var shader;
           if (name == "fragment.txt") {
             shader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -58,14 +51,14 @@
             return null;
           }
 
-          gl.shaderSource(shader, str);
+          gl.shaderSource(shader, shaderScript);
           gl.compileShader(shader);
 
           if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
             alert(gl.getShaderInfoLog(shader));
             return null;
           }
-
+          alert(shader);
           return shader;
         });
     }
@@ -169,13 +162,6 @@
       zoom = 1.0;
       document.getElementById('input_checkers_iteration').value = checkers_iteration;
 
-      var xmlhttp = new XMLHttpRequest();
-      xmlhttp.open('GET', '/0/data.txt', false);
-      xmlhttp.send(null);
-      if (xmlhttp.status == 200) {
-        alert(xmlhttp.responseText);
-      }
-
       var canvas = document.getElementById("wegl-canvas");
       initGL(canvas);
       initShaders()
@@ -222,15 +208,15 @@
     function canvasCatch(e) {
       catch_coordx = e.clientX;
       catch_coordy = e.clientY;
-      in_canas = true;
+      in_canvas = true;
     }
 
     function canvasRelease() {
-      in_canas = false;
+      in_canvas = false;
     }
 
     function canvasMove(e) {
-      if (in_canas) {
+      if (in_canvas) {
         move_x += e.clientX - catch_coordx;
         move_y += e.clientY - catch_coordy;
         catch_coordx = e.clientX;
@@ -239,7 +225,7 @@
     }
 
     function wheelZoom(e) {
-      if (in_canas) {
+      if (in_canvas) {
         if (e.deltaY < 0) zoom *= 0.9;
         else zoom /= 0.9;
       }
