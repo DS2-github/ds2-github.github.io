@@ -74,17 +74,19 @@
     var shaderProgram;
 
     function initShaders() {
-      var fragmentShader = "";
-      var vertexShader = getShader(gl, "vertex.txt");
       getShader(gl, "fragment.txt")
         .then(fragmentShader => {
           shaderProgram = gl.createProgram();
-          gl.attachShader(shaderProgram, vertexShader);
+          gl.attachShader(shaderProgram, fragmentShader);
         })
         .finaly(() => {
-          gl.attachShader(shaderProgram, fragmentShader);
+          getShader(gl, "vertex.txt")
+        })
+        .then(vertexShader => {
+          gl.attachShader(shaderProgram, vertexShader);
           gl.linkProgram(shaderProgram);
-
+        })
+        .finaly(() => {
           if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
             alert("Could not initialise shaders");
           }
@@ -178,14 +180,17 @@
 
       var canvas = document.getElementById("wegl-canvas");
       initGL(canvas);
-      initShaders();
-      initBuffers();
+      initShaders()
+        .finaly(() => {
+          initBuffers();
 
-      gl.clearColor(0.0, 0.0, 0.0, 1.0);
-      gl.enable(gl.DEPTH_TEST);
+          gl.clearColor(0.0, 0.0, 0.0, 1.0);
+          gl.enable(gl.DEPTH_TEST);
 
-      drawScene();
-      tick();
+          drawScene();
+          tick();
+        })
+
     }
 
     function update_checkers_iteration() {
