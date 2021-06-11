@@ -26,6 +26,7 @@
       }
     }
 
+    var shader;
     async function getShader(gl, name) {
       window.fetch(name,
         { mode: 'cors' }
@@ -44,12 +45,11 @@
           let str = "";
           let k = shaderScript.firstChild;
           while (k) {
-            if (k.nodeType == 3) {
+            if (k.ss == 3) {
               str += k.textContent;
             }
             k = k.nextSibling;
           }
-          var shader;
           if (name == "./fragment.txt") {
             shader = gl.createShader(gl.FRAGMENT_SHADER);
           } else if (name == "./vertex.txt") {
