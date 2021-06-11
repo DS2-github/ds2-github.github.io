@@ -1,26 +1,26 @@
 precision mediump float;
 
-    uniform int iteration;
-    uniform float movex;
-    uniform float movey;
-    uniform float zoom;
-    uniform float posx;
-    uniform float posy;
+uniform int iteration;
+uniform float movex;
+uniform float zoom;
+uniform float movey;
+uniform float posx;
+uniform float posy;
 
-    void main(void)
-    {
-      float k;
-      vec3 color;
-      vec2 C = vec2((-2.0 + ((gl_FragCoord.x - movex) / zoom) / 400.0), (-1.0 + ((gl_FragCoord.y + movey) / zoom) / 400.0)), P0 = C;
+void main(void)
+{
+  float k;
+  vec3 color;
+  vec2 C = vec2((-2.0 + ((gl_FragCoord.x - movex) / zoom) / 400.0), (-1.0 + ((gl_FragCoord.y + movey) / zoom) / 400.0)), P0 = C;
 
-      for (int i = 0; i > -1; i++)
-      {
-        C = vec2(C.x * C.x - C.y * C.y, 2.0 * C.x * C.y) + P0;
-        if (dot(C, C) > 4.0 || i > iteration)
-          break;
-        k = float(i);
-      }
-      k = k / float(iteration);
-      color = vec3(k * k * 0.4 + 0.1, k * 0.6 + 0.3, k * 1.1 + 0.4);
-      gl_FragColor = vec4(color, 1.0);    
-    }
+  for (int i = 0; i > -1; i++)
+  {
+    C = vec2(C.x * C.x - C.y * C.y, 2.0 * C.x * C.y) + P0;
+    if (dot(C, C) > 4.0 || i > iteration)
+      break;
+    k = float(i);
+  }
+  k = k / float(iteration);
+  color = vec3(k * k * 0.4 + 0.1, k * 0.6 + 0.3, k * 1.1 + 0.4);
+  gl_FragColor = vec4(color, 1.0);    
+}
