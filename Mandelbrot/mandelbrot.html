@@ -26,60 +26,38 @@
       }
     }
 
-    var shader;
-    async function getShader(gl, name) {
-      window.fetch(name,
-        { mode: 'cors' }
-      )
+    async function loadShader(name) {
+      window.fetch(name)
         .then(response => {
-          if (!response.ok) {
-            throw new Error(`Response status is: ${response.status}`);
-          }
-
-          return response.text();
-        })
-        .then(shaderScript => {
-          if (!shaderScript) {
-            return null;
-          }
-          let str = "";
-          let k = shaderScript.firstChild;
-          while (k) {
-            if (k.ss == 3) {
-              str += k.textContent;
-            }
-            k = k.nextSibling;
-          }
+          let src = response.text();
+          let shader;
           if (name == "./fragment.txt") {
             shader = gl.createShader(gl.FRAGMENT_SHADER);
           } else if (name == "./vertex.txt") {
             shader = gl.createShader(gl.VERTEX_SHADER);
-          } else {
-            return null;
           }
 
-          gl.shaderSource(shader, str);
+          gl.shaderSource(shader, src);
           gl.compileShader(shader);
 
           if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
             alert(gl.getShaderInfoLog(shader));
-            return null;
+            return Promise.resolve(null);
           }
-          alert("done");
           return Promise.resolve(shader);
-        });
+        })
     }
 
     var shaderProgram;
 
     async function initShaders() {
-      getShader(gl, "./fragment.txt")
-        .then(fragmentShader => {
+      loadShader("./fragment.txt")
+        .then(shaderF => {
           shaderProgram = gl.createProgram();
-          gl.attachShader(shaderProgram, fragmentShader)
-          getShader(gl, "./vertex.txt")
-            .then(vertexShader => {
-              gl.attachShader(shaderProgram, vertexShader);
+          gl.attachShader(shaderProgram, shaderF)
+          loadShader("./vertex.txt")
+            .then(shaderV => {
+              gl.attachShader(shaderProgram, shaderV);
               gl.linkProgram(shaderProgram);
               if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
                 alert("Could not initialise shaders");
