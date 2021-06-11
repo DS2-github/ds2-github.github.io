@@ -78,11 +78,10 @@
       shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
       shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
       shaderProgram.iterationUniform = gl.getUniformLocation(shaderProgram, "iteration");
-      shaderProgram.movexUniform = gl.getUniformLocation(shaderProgram, "movex");
-      shaderProgram.moveyUniform = gl.getUniformLocation(shaderProgram, "movey");
-      shaderProgram.zoomUniform = gl.getUniformLocation(shaderProgram, "zoom");
-      shaderProgram.posxUniform = gl.getUniformLocation(shaderProgram, "posx");
-      shaderProgram.posyUniform = gl.getUniformLocation(shaderProgram, "posy");
+      shaderProgram.cenxUniform = gl.getUniformLocation(shaderProgram, "cenx");
+      shaderProgram.cenyUniform = gl.getUniformLocation(shaderProgram, "ceny");
+      shaderProgram.heightUniform = gl.getUniformLocation(shaderProgram, "height");
+      shaderProgram.widthUniform = gl.getUniformLocation(shaderProgram, "width");
     }
 
 
@@ -93,11 +92,10 @@
       gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
       gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
       gl.uniform1i(shaderProgram.iterationUniform, checkers_iteration);
-      gl.uniform1f(shaderProgram.movexUniform, move_x);
-      gl.uniform1f(shaderProgram.moveyUniform, move_y);
-      gl.uniform1f(shaderProgram.zoomUniform, zoom);
-      gl.uniform1f(shaderProgram.posxUniform, catch_coordx);
-      gl.uniform1f(shaderProgram.posyUniform, catch_coordy);
+      gl.uniform1f(shaderProgram.cenxUniform, cen_x);
+      gl.uniform1f(shaderProgram.cenyUniform, cen_y);
+      gl.uniform1f(shaderProgram.heightUniform, catch_coord.x);
+      gl.uniform1f(shaderProgram.widthUniform, catch_coord.y);
     }
 
     var squareVertexPositionBuffer;
@@ -141,16 +139,17 @@
 
     function webGLStart() {
       checkers_iteration = 1;
-      move_x = 0;
-      move_y = 0;
-      catch_coordx = 0;
-      catch_coordy = 0;
+      cen_x = -0.5;
+      cen_y = 0;
+      catch_coord = { x: 0, y: 0 };
       zoom = 1.0;
+      width = 1.5;
+      height = 1;
       document.getElementById('input_checkers_iteration').value = checkers_iteration;
 
       var canvas = document.getElementById("wegl-canvas");
       initGL(canvas);
-      initShaders()
+      initShaders();
       initBuffers();
 
       gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -182,15 +181,16 @@
       if (isNaN(checkers_iteration))
         checkers_iteration = 1;
     }
-    var catch_coordx;
-    var catch_coordy;
+    var catch_coord;
     var in_canvas;
-    var move_x;
-    var move_y;
     var zoom;
+    var cen_x;
+    var cen_y;
+    var width;
+    var height;
+
     function canvasCatch(e) {
-      catch_coordx = e.clientX;
-      catch_coordy = e.clientY;
+      catch_coord = { x: e.clientX, y: e.clientY };
       in_canvas = true;
     }
 
@@ -200,17 +200,26 @@
 
     function canvasMove(e) {
       if (in_canvas) {
-        move_x += e.clientX - catch_coordx;
-        move_y += e.clientY - catch_coordy;
-        catch_coordx = e.clientX;
-        catch_coordy = e.clientY;
+        cen_x += -(e.clientX - catch_coord.x) / 400.0 * zoom;
+        cen_y += (e.clientY - catch_coord.y) / 400.0 * zoom;
+        catch_coord = { x: e.clientX, y: e.clientY };
       }
     }
 
     function wheelZoom(e) {
-      if (in_canvas) {
-        if (e.deltaY < 0) zoom *= 0.9;
-        else zoom /= 0.9;
+      if (event.deltaY > 0) {
+        cen_x = -(event.clientX - 600.0) / 600.0 * width + cen_x;
+        cen_y = -(event.clientY - 400.0) / 400.0 * -height + cen_y;
+        width *= 2;
+        height *= 2;
+        zoom *= 2;
+      }
+      else if (event.deltaY < 0) {
+        cen_x = (event.clientX - 600.0) / 600.0 * width / 2 + cen_x;
+        cen_y = (event.clientY - 400.0) / 400.0 * -height / 2 + cen_y;
+        width /= 2;
+        height /= 2;
+        zoom /= 2;
       }
     }
   </script>
