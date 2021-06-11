@@ -58,44 +58,45 @@
             alert(gl.getShaderInfoLog(shader));
             return null;
           }
-          alert(shader);
-          return shader;
+          resolve(shader);
         });
     }
 
     var shaderProgram;
 
     function initShaders() {
-      getShader(gl, "fragment.txt")
-        .then(fragmentShader => {
-          shaderProgram = gl.createProgram();
-          gl.attachShader(shaderProgram, fragmentShader);
+      let is_done = false;
+      let promise1 = new Promise(resolve => { getShader(gl, "fragment.txt") });
+
+      promise1.then(fragmentShader => {
+        shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, fragmentShader);
+        let promise2 = new Promise(resolve => { getShader(gl, "vertex.txt") });
+
+        promise2.then(vertexShader => {
+          gl.attachShader(shaderProgram, vertexShader);
+          gl.linkProgram(shaderProgram);
+          if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+          }
+
+          gl.useProgram(shaderProgram);
+
+          shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+          gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+          shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+          shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+          shaderProgram.iterationUniform = gl.getUniformLocation(shaderProgram, "iteration");
+          shaderProgram.movexUniform = gl.getUniformLocation(shaderProgram, "movex");
+          shaderProgram.moveyUniform = gl.getUniformLocation(shaderProgram, "movey");
+          shaderProgram.zoomUniform = gl.getUniformLocation(shaderProgram, "zoom");
+          shaderProgram.posxUniform = gl.getUniformLocation(shaderProgram, "posx");
+          shaderProgram.posyUniform = gl.getUniformLocation(shaderProgram, "posy");
+          is_done = true;
         })
-        .finaly(() => {
-          getShader(gl, "vertex.txt")
-            .then(vertexShader => {
-              gl.attachShader(shaderProgram, vertexShader);
-              gl.linkProgram(shaderProgram);
-            }).finaly(() => {
-              if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-                alert("Could not initialise shaders");
-              }
-
-              gl.useProgram(shaderProgram);
-
-              shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-              gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
-              shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-              shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-              shaderProgram.iterationUniform = gl.getUniformLocation(shaderProgram, "iteration");
-              shaderProgram.movexUniform = gl.getUniformLocation(shaderProgram, "movex");
-              shaderProgram.moveyUniform = gl.getUniformLocation(shaderProgram, "movey");
-              shaderProgram.zoomUniform = gl.getUniformLocation(shaderProgram, "zoom");
-              shaderProgram.posxUniform = gl.getUniformLocation(shaderProgram, "posx");
-              shaderProgram.posyUniform = gl.getUniformLocation(shaderProgram, "posy");
-            })
-        })
+      })
+      if (is_done) resolve("done");
     }
 
 
@@ -164,16 +165,17 @@
 
       var canvas = document.getElementById("wegl-canvas");
       initGL(canvas);
-      initShaders()
-        .finaly(() => {
-          initBuffers();
+      let promise = new Promise(resolve => { initShaders() });
 
-          gl.clearColor(0.0, 0.0, 0.0, 1.0);
-          gl.enable(gl.DEPTH_TEST);
+      promise.then(condition => {
+        initBuffers();
 
-          drawScene();
-          tick();
-        })
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+
+        drawScene();
+        tick();
+      })
     }
 
     function update_checkers_iteration() {
