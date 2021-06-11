@@ -36,28 +36,28 @@
           } else if (name == "./vertex.txt") {
             shader = gl.createShader(gl.VERTEX_SHADER);
           }
+          else return null;
 
           gl.shaderSource(shader, src);
           gl.compileShader(shader);
 
           if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
             alert(gl.getShaderInfoLog(shader));
-            return Promise.resolve(null);
+            return null;
           }
-          return Promise.resolve(shader);
+
+          gl.attachShader(shaderProgram, shader)
         })
     }
 
     var shaderProgram;
 
     async function initShaders() {
+      shaderProgram = gl.createProgram();
       loadShader("./fragment.txt")
-        .then(shaderF => {
-          shaderProgram = gl.createProgram();
-          gl.attachShader(shaderProgram, shaderF)
+        .finaly(() => {
           loadShader("./vertex.txt")
-            .then(shaderV => {
-              gl.attachShader(shaderProgram, shaderV);
+            .finaly(() => {
               gl.linkProgram(shaderProgram);
               if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
                 alert("Could not initialise shaders");
