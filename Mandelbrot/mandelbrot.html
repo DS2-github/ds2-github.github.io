@@ -227,19 +227,21 @@
     }
 
     function wheelZoom(e) {
-      if (event.deltaY > 0) {
-        cen_x = -(event.clientX - 600.0) / 600.0 * width + cen_x;
-        cen_y = -(event.clientY - 400.0) / 400.0 * -height + cen_y;
-        width *= 2.0;
-        height *= 2.0;
-        zoom *= 2.0;
-      }
-      else if (event.deltaY < 0) {
-        cen_x = (event.clientX - 600.0) / 600.0 * width / 2 + cen_x;
-        cen_y = (event.clientY - 400.0) / 400.0 * -height / 2 + cen_y;
-        width /= 2.0;
-        height /= 2.0;
-        zoom /= 2.0;
+      if (in_canvas) {
+        if (event.deltaY > 0) {
+          cen_x = -(event.clientX - 600.0) / 600.0 * width + cen_x;
+          cen_y = -(event.clientY - 400.0) / 400.0 * -height + cen_y;
+          width *= 2.0;
+          height *= 2.0;
+          zoom *= 2.0;
+        }
+        else if (event.deltaY < 0) {
+          cen_x = (event.clientX - 600.0) / 600.0 * width / 2 + cen_x;
+          cen_y = (event.clientY - 400.0) / 400.0 * -height / 2 + cen_y;
+          width /= 2.0;
+          height /= 2.0;
+          zoom /= 2.0;
+        }
       }
     }
   </script>
@@ -262,5 +264,9 @@
   <label for="input_checkers_iteration">Down</label> <input type="button" id="input_checkers_iteration"
     onmousedown="update_down_checkers_iteration()"><br>
 </body>
+<footer style="background-color: grey;">
+  <br>
+  <h2>Daniil Smirnov (cgsg forever!!!)</h2><br><br>
+</footer>>
 
 </html>
