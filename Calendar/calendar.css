@@ -1,5 +1,5 @@
 #month {
-    background-color: rgb(255, 255, 255);         
+    background-color: white;         
     padding: 3px 10px 3px;
     width: 100px;
     text-align: center;   
@@ -8,20 +8,20 @@
     border-style: none;
     display: inline-block;
 }
+#month.main {
+    background-color: #e8c5ff;
+    color: white;
+    border-radius: 3px;
+}
+
 .mnth {
-    background-color: rgb(255, 255, 255);  
+    background-color: white;  
     width: 100px;    
     padding: 3px 10px 4px;
     text-align: center;   
     font-size: 21px;
     margin: 2px 2px;
     border-style: none;
-}
-
-#month.main {
-    background-color: #e8c5ff;
-    color: rgb(255, 255, 255);
-    border-radius: 3px;
 }
 
 .mnth:hover {
@@ -34,7 +34,7 @@
     border-radius: 3px;
 }
 
-.year {
+#year {
     background-color: #ffffff;
     color: black;
     padding: 3px 10px 4px;
@@ -43,11 +43,26 @@
     border-style: none;
 }
 
-.year:hover {
+#year.main {
+    background-color: #4fbbdb;
+    color: whitesmoke;
+    border-radius: 3px;
+}
+
+.yr {
+    background-color: #ffffff;
+    color: black;
+    padding: 3px 10px 4px;
+    font-size: 21px;
+    margin: 2px 2px;
+    border-style: none;
+}
+
+.yr:hover {
     background: #efefef;
 }
 
-.year.main {
+.yr.main {
     background-color: #4fbbdb;
     color: whitesmoke;
     border-radius: 3px;

@@ -72,7 +72,7 @@
                 }
             }
             let mnth = document.getElementById("mnt").children;
-            for (let i = 0; i < 11; ++i) {
+            for (let i = 0; i < 12; ++i) {
                 mnth[i].innerHTML = month_list[i];
                 if (
                     i === main_date.getMonth() &&
@@ -81,6 +81,15 @@
                     mnth[i].classList.add("main");
                 else
                     mnth[i].classList.remove("main");
+            }
+
+            let yrr = document.getElementById("yrr").children;
+            for (let i = 0; i < 16; ++i) {
+                yrr[i].innerHTML = 2015 + i;
+                if (2015 + i === main_date.getFullYear())
+                    yrr[i].classList.add("main");
+                else
+                    yrr[i].classList.remove("main");
             }
         }
 
@@ -94,8 +103,9 @@
             updateCal();
         }
 
-        function yearSet() {
-
+        function yearSet(y) {
+            current_date.setFullYear(y);
+            updateCal();
         }
 
         function monthSet(m) {
@@ -109,14 +119,24 @@
     <br><br><br><br>
     <ul class="list">
         <li class="option">
-            <a class="year" id="year"></a>
-            <ul class="selection" id="yr">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+            <a class="yr" id="year"></a>
+            <ul class="selection" id="yrr">
+                <li class="yr" id="y0" onclick="yearSet(2015);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2016);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2017);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2018);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2019);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2020);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2021);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2022);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2023);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2024);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2025);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2026);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2027);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2028);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2029);"></li>
+                <li class="yr" id="y0" onclick="yearSet(2030);"></li>
             </ul>
         </li>
 
@@ -205,6 +225,7 @@
             <td id="56" class="day"></td>
         </tr>
     </table>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 
 </html>
