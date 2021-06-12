@@ -56,32 +56,37 @@
     var shaderProgram;
 
     async function initShaders() {
-      let shader_list = ["./fragment.txt", "./vertex.txt"];
+      return new Promise(resolve => {
+        let shader_list = ["./fragment.txt", "./vertex.txt"];
+        let shader_prg = gl.createProgram();
+        let shader_requests = shader_list.map(name => getShader(name));
+        Promise.all(shader_requests)
+          .then(list => {
+            for (let shd of list)
+              gl.attachShader(shader_prg, shd);
 
-      shaderProgram = gl.createProgram();
-      let shader_requests = shader_list.map(name => getShader(name));
-      let list = await Promise.all(shader_requests);
-      for (let shd of list)
-        gl.attachShader(shaderProgram, shd);
+            gl.linkProgram(shader_prg);
 
-      gl.linkProgram(shaderProgram);
+            if (!gl.getProgramParameter(shader_prg, gl.LINK_STATUS)) {
+              alert("Could not initialise shaders");
+            }
 
-      if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert("Could not initialise shaders");
-      }
+            gl.useProgram(shader_prg);
 
-      gl.useProgram(shaderProgram);
+            shader_prg.vertexPositionAttribute = gl.getAttribLocation(shader_prg, "aVertexPosition");
+            gl.enableVertexAttribArray(shader_prg.vertexPositionAttribute);
 
-      shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-      gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+            shader_prg.pMatrixUniform = gl.getUniformLocation(shader_prg, "uPMatrix");
+            shader_prg.mvMatrixUniform = gl.getUniformLocation(shader_prg, "uMVMatrix");
+            shader_prg.iterationUniform = gl.getUniformLocation(shader_prg, "iteration");
+            shader_prg.cenxUniform = gl.getUniformLocation(shader_prg, "cenx");
+            shader_prg.cenyUniform = gl.getUniformLocation(shader_prg, "ceny");
+            shader_prg.heightUniform = gl.getUniformLocation(shader_prg, "height");
+            shader_prg.widthUniform = gl.getUniformLocation(shader_prg, "width");
 
-      shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-      shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-      shaderProgram.iterationUniform = gl.getUniformLocation(shaderProgram, "iteration");
-      shaderProgram.cenxUniform = gl.getUniformLocation(shaderProgram, "cenx");
-      shaderProgram.cenyUniform = gl.getUniformLocation(shaderProgram, "ceny");
-      shaderProgram.heightUniform = gl.getUniformLocation(shaderProgram, "height");
-      shaderProgram.widthUniform = gl.getUniformLocation(shaderProgram, "width");
+            resolve(shader_prg);
+          })
+      })
     }
 
 
@@ -94,8 +99,8 @@
       gl.uniform1i(shaderProgram.iterationUniform, checkers_iteration);
       gl.uniform1f(shaderProgram.cenxUniform, cen_x);
       gl.uniform1f(shaderProgram.cenyUniform, cen_y);
-      gl.uniform1f(shaderProgram.heightUniform, catch_coord.x);
-      gl.uniform1f(shaderProgram.widthUniform, catch_coord.y);
+      gl.uniform1f(shaderProgram.heightUniform, height);
+      gl.uniform1f(shaderProgram.widthUniform, width);
     }
 
     var squareVertexPositionBuffer;
@@ -140,28 +145,33 @@
     function webGLStart() {
       checkers_iteration = 1;
       cen_x = -0.5;
-      cen_y = 0;
+      cen_y = 0.0;
       catch_coord = { x: 0, y: 0 };
       zoom = 1.0;
       width = 1.5;
-      height = 1;
+      height = 1.0;
       document.getElementById('input_checkers_iteration').value = checkers_iteration;
 
       var canvas = document.getElementById("wegl-canvas");
       initGL(canvas);
-      initShaders();
-      initBuffers();
+      initShaders()
+        .then(shd_prg => {
+          shaderProgram = shd_prg;
+          initBuffers();
 
-      gl.clearColor(0.0, 0.0, 0.0, 1.0);
-      gl.enable(gl.DEPTH_TEST);
+          gl.clearColor(0.0, 0.0, 0.0, 1.0);
+          gl.enable(gl.DEPTH_TEST);
 
-      drawScene();
-      tick();
+          drawScene();
+          tick();
+        })
     }
 
     function update_checkers_iteration() {
-      data = document.getElementById('input_checkers_iteration').value;
-      checkers_iteration = parseInt(data);
+      data = parseInt(document.getElementById('input_checkers_iteration').value);
+      if (data > 500) data = 500;
+      checkers_iteration = data;
+      document.getElementById('input_checkers_iteration').value = data;
       if (isNaN(checkers_iteration))
         checkers_iteration = 1;
     }
@@ -173,11 +183,11 @@
         checkers_iteration = 1;
     }
     function update_down_checkers_iteration() {
-      data = document.getElementById('input_checkers_iteration').value;
-      if (parseInt(data) === 1)
-        return;
-      checkers_iteration = parseInt(data) - 1;
-      document.getElementById('input_checkers_iteration').value = checkers_iteration;
+      data = parseInt(document.getElementById('input_checkers_iteration').value);
+      if (data < 2)
+        data = 2;
+      checkers_iteration = data - 1;
+      document.getElementById('input_checkers_iteration').value = data;
       if (isNaN(checkers_iteration))
         checkers_iteration = 1;
     }
@@ -210,16 +220,16 @@
       if (event.deltaY > 0) {
         cen_x = -(event.clientX - 600.0) / 600.0 * width + cen_x;
         cen_y = -(event.clientY - 400.0) / 400.0 * -height + cen_y;
-        width *= 2;
-        height *= 2;
-        zoom *= 2;
+        width *= 2.0;
+        height *= 2.0;
+        zoom *= 2.0;
       }
       else if (event.deltaY < 0) {
         cen_x = (event.clientX - 600.0) / 600.0 * width / 2 + cen_x;
         cen_y = (event.clientY - 400.0) / 400.0 * -height / 2 + cen_y;
-        width /= 2;
-        height /= 2;
-        zoom /= 2;
+        width /= 2.0;
+        height /= 2.0;
+        zoom /= 2.0;
       }
     }
   </script>
@@ -237,9 +247,10 @@
 
   <label for="input_checkers_iteration">num of iterations</label> <input type="text" id="input_checkers_iteration"
     onkeyup="update_checkers_iteration()"><br>
-  <b>Up </b><input type="button" id="input_checkers_iteration" onmousedown="update_up_checkers_iteration()">
-  <b>Down </b><input type="button" id="input_checkers_iteration" onmousedown="update_down_checkers_iteration()"><br>
-
+  <label for="input_checkers_iteration">Up</label> <input type="button" id="input_checkers_iteration"
+    onmousedown="update_up_checkers_iteration()">
+  <label for="input_checkers_iteration">Down</label> <input type="button" id="input_checkers_iteration"
+    onmousedown="update_down_checkers_iteration()"><br>
 </body>
 
 </html>
