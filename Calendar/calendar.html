@@ -42,7 +42,7 @@
             let first_day = -((tmp_date.getDay() + 6) % 7) + 1;
             let id_list = document.getElementById("calendar").children[0];
             let flag = true;
-            for (let i = 1; i < 6; ++i) {
+            for (let i = 1; i < 7; ++i) {
                 for (let j = 0; j < 7; ++j) {
                     tmp_date.setDate(first_day);
                     let pos = tmp_date.getDate();
@@ -71,24 +71,36 @@
                     ++first_day;
                 }
             }
+            let mnth = document.getElementById("mnt").children;
+            for (let i = 0; i < 11; ++i) {
+                mnth[i].innerHTML = month_list[i];
+                if (
+                    i === main_date.getMonth() &&
+                    current_date.getFullYear() === main_date.getFullYear()
+                )
+                    mnth[i].classList.add("main");
+                else
+                    mnth[i].classList.remove("main");
+            }
         }
 
         function monthNext() {
             current_date.setMonth(current_date.getMonth() + 1);
-            updateCal()
+            updateCal();
         }
 
         function monthPrev() {
             current_date.setMonth(current_date.getMonth() - 1);
-            updateCal()
+            updateCal();
         }
 
         function yearSet() {
 
         }
 
-        function monthSet() {
-
+        function monthSet(m) {
+            current_date.setMonth(m);
+            updateCal();
         }
     </script>
 </head>
@@ -97,26 +109,32 @@
     <br><br><br><br>
     <ul class="list">
         <li class="option">
-            <a class="option" id="year">Красноярский край</a>
-            <ul class="selection">
-                <li><a>Минусинск</a></li>
-                <li><a>Ачинск</a></li>
-                <li><a>Красноярск</a></li>
-                <li><a>Железногорск</a></li>
-                <li><a>Канск</a></li>
-                <li><a>Норильск</a></li>
+            <a class="year" id="year"></a>
+            <ul class="selection" id="yr">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
             </ul>
         </li>
 
         <li class="option">
-            <a class="option" id="month">Свердловская область</a>
-            <ul class="selection">
-                <li><a>Екатеринбург</a></li>
-                <li><a>Верхняя Пышма</a></li>
-                <li><a>Нижний Тагил</a></li>
-                <li><a>Первоуральск</a></li>
-                <li><a>Асбест</a></li>
-                <li><a>Каменск-Уральский</a></li>
+            <a class="mnth" id="month"></a>
+            <ul class="selection" id="mnt">
+                <li class="mnth" id="m0" onclick="monthSet(0);"></li>
+                <li class="mnth" id="m1" onclick="monthSet(1);"></li>
+                <li class="mnth" id="m2" onclick="monthSet(2);"></li>
+                <li class="mnth" id="m3" onclick="monthSet(3);"></li>
+                <li class="mnth" id="m4" onclick="monthSet(4);"></li>
+                <li class="mnth" id="m5" onclick="monthSet(5);"></li>
+                <li class="mnth" id="m6" onclick="monthSet(6);"></li>
+                <li class="mnth" id="m7" onclick="monthSet(7);"></li>
+                <li class="mnth" id="m8" onclick="monthSet(8);"></li>
+                <li class="mnth" id="m9" onclick="monthSet(9);"></li>
+                <li class="mnth" id="m10" onclick="monthSet(10);"></li>
+                <li class="mnth" id="m11" onclick="monthSet(11);"></li>
             </ul>
         </li>
     </ul>
@@ -133,22 +151,22 @@
             <td>Вс</td>
         </tr>
         <tr>
-            <td id="00" class="day">0</td>
-            <td id="01" class="day">1</td>
-            <td id="02" class="day">2</td>
-            <td id="03" class="day">3</td>
-            <td id="04" class="day">4</td>
-            <td id="05" class="day">5</td>
-            <td id="06" class="day">6</td>
+            <td id="00" class="day"></td>
+            <td id="01" class="day"></td>
+            <td id="02" class="day"></td>
+            <td id="03" class="day"></td>
+            <td id="04" class="day"></td>
+            <td id="05" class="day"></td>
+            <td id="06" class="day"></td>
         </tr>
         <tr>
-            <td id="10" class="day">0</td>
-            <td id="11" class="day">1</td>
-            <td id="12" class="day">2</td>
-            <td id="13" class="day">3</td>
-            <td id="14" class="day">4</td>
-            <td id="15" class="day">5</td>
-            <td id="16" class="day">6</td>
+            <td id="10" class="day"></td>
+            <td id="11" class="day"></td>
+            <td id="12" class="day"></td>
+            <td id="13" class="day"></td>
+            <td id="14" class="day"></td>
+            <td id="15" class="day"></td>
+            <td id="16" class="day"></td>
         </tr>
         <tr>
             <td id="20" class="day"></td>
@@ -176,6 +194,15 @@
             <td id="44" class="day"></td>
             <td id="45" class="day"></td>
             <td id="46" class="day"></td>
+        </tr>
+        <tr>
+            <td id="50" class="day"></td>
+            <td id="51" class="day"></td>
+            <td id="52" class="day"></td>
+            <td id="53" class="day"></td>
+            <td id="54" class="day"></td>
+            <td id="55" class="day"></td>
+            <td id="56" class="day"></td>
         </tr>
     </table>
 </body>

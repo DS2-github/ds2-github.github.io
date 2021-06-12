@@ -1,50 +1,56 @@
 #month {
-    background-color: #ffffff;
-    color: black;
-    padding: 3px 10px 4px;
-    width: 110px;
-    text-align: center;
-    text-decoration: none;
+    background-color: rgb(255, 255, 255);         
+    padding: 3px 10px 3px;
+    width: 100px;
+    text-align: center;   
+    font-size: 21px;
+    margin: -3px 2px;
+    border-style: none;
     display: inline-block;
+}
+.mnth {
+    background-color: rgb(255, 255, 255);  
+    width: 100px;    
+    padding: 3px 10px 4px;
+    text-align: center;   
     font-size: 21px;
     margin: 2px 2px;
     border-style: none;
-}
-
-#month:hover {
-    background: #efefef;
 }
 
 #month.main {
-    background-color: #a454da;
+    background-color: #e8c5ff;
+    color: rgb(255, 255, 255);
+    border-radius: 3px;
+}
+
+.mnth:hover {
+    background: #efefef;
+}
+
+.mnth.main {
+    background-color: #e8c5ff;
     color: whitesmoke;
     border-radius: 3px;
 }
 
-#year {
+.year {
     background-color: #ffffff;
     color: black;
     padding: 3px 10px 4px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
     font-size: 21px;
     margin: 2px 2px;
     border-style: none;
 }
 
-#year:hover {
+.year:hover {
     background: #efefef;
 }
 
-#year.main {
+.year.main {
     background-color: #4fbbdb;
     color: whitesmoke;
     border-radius: 3px;
-}
-
-#calendar {
-    display:block;
 }
 
 td {
@@ -86,6 +92,7 @@ td {
     display: inline-block;
     border-radius: 50%;
     padding: 8px 14px;
+    margin-top: -4px;
     color: black;
     border-style: none;
     background-color: #f1f1f1;
@@ -110,16 +117,7 @@ ul.list li.option {
     float: left;
     display: inline;
 }
-ul.list a.option:hover {
-    padding: 3px 10px 4px;
-}
 ul.list li.option:hover .selection {
     left: 0;
     display: block;
  }
-ul.list .selection {
-    background: #ffffff;
-}
-ul.list .selection a:hover {
-    background: #efefef;
-}
