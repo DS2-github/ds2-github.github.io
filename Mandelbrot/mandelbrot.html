@@ -168,28 +168,38 @@
     }
 
     function update_checkers_iteration() {
-      data = parseInt(document.getElementById('input_checkers_iteration').value);
-      if (data > 500) data = 500;
-      checkers_iteration = data;
-      document.getElementById('input_checkers_iteration').value = data;
-      if (isNaN(checkers_iteration))
+      data = document.getElementById('input_checkers_iteration').value;
+      if (isNaN(data)) {
         checkers_iteration = 1;
+      } else {
+        data = parseInt(data);
+        if (data > 1000) data = 1000;
+        else if (data < 1) data = 1;
+        checkers_iteration = data;
+      }
+      document.getElementById('input_checkers_iteration').value = checkers_iteration;
     }
     function update_up_checkers_iteration() {
       data = document.getElementById('input_checkers_iteration').value;
-      checkers_iteration = parseInt(data) + 1;
-      document.getElementById('input_checkers_iteration').value = checkers_iteration;
-      if (isNaN(checkers_iteration))
+      if (isNaN(data)) {
         checkers_iteration = 1;
+      }
+      else {
+        checkers_iteration = parseInt(data) + 1;
+      }
+      document.getElementById('input_checkers_iteration').value = checkers_iteration;
     }
     function update_down_checkers_iteration() {
-      data = parseInt(document.getElementById('input_checkers_iteration').value);
-      if (data < 2)
-        data = 2;
-      checkers_iteration = data - 1;
-      document.getElementById('input_checkers_iteration').value = data;
-      if (isNaN(checkers_iteration))
+      data = document.getElementById('input_checkers_iteration').value;
+      if (isNaN(data)) {
         checkers_iteration = 1;
+      } else {
+        data = parseInt(data);
+        if (data < 2)
+          data = 2;
+        checkers_iteration = data - 1;
+      }
+      document.getElementById('input_checkers_iteration').value = checkers_iteration;
     }
     var catch_coord;
     var in_canvas;
