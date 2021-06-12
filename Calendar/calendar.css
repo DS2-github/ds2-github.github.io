@@ -1,0 +1,125 @@
+#month {
+    background-color: #ffffff;
+    color: black;
+    padding: 3px 10px 4px;
+    width: 110px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 21px;
+    margin: 2px 2px;
+    border-style: none;
+}
+
+#month:hover {
+    background: #efefef;
+}
+
+#month.main {
+    background-color: #a454da;
+    color: whitesmoke;
+    border-radius: 3px;
+}
+
+#year {
+    background-color: #ffffff;
+    color: black;
+    padding: 3px 10px 4px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 21px;
+    margin: 2px 2px;
+    border-style: none;
+}
+
+#year:hover {
+    background: #efefef;
+}
+
+#year.main {
+    background-color: #4fbbdb;
+    color: whitesmoke;
+    border-radius: 3px;
+}
+
+#calendar {
+    display:block;
+}
+
+td {
+    background-color: #ffffff;
+    border: none;
+    color: black;
+    width: 18px;
+    height: 18px;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2px 2px;
+}
+.day.out {
+    color: gray;
+}
+.day.main {
+    background-color: #5483ca;
+    color: whitesmoke;
+    border-radius: 3px;
+}
+.day.select {
+    background-color: rgb(210, 174, 245);
+    color: whitesmoke;
+    border-radius: 3px;
+}
+.day:hover {
+    border:rgb(210, 210, 210);
+    border-style: groove;
+    border-width: 3px;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+.button {
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 50%;
+    padding: 8px 14px;
+    color: black;
+    border-style: none;
+    background-color: #f1f1f1;
+}
+.button:hover {
+    background-color: #ddd;
+}
+
+ul.list li {
+    position: relative;
+}
+ul.list, ul.selection {
+    padding: 0;
+    list-style-type: none;
+}
+ul.selection {
+    left: -9999px;
+    position: absolute;
+}
+ul.list li.option {
+    margin: 0 1px 0 0;
+    float: left;
+    display: inline;
+}
+ul.list a.option:hover {
+    padding: 3px 10px 4px;
+}
+ul.list li.option:hover .selection {
+    left: 0;
+    display: block;
+ }
+ul.list .selection {
+    background: #ffffff;
+}
+ul.list .selection a:hover {
+    background: #efefef;
+}

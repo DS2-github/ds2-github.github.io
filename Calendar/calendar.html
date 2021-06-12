@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="calendar.css">
+    <tittle> Calendar </tittle>
+    <script type="text/javascript">
+        var current_date;
+        var main_date;
+        //var month_list = [{ m: 'January', n: 0 }, { m: 'February', n: 1 }, { m: 'March', n: 2 }, { m: 'April', n: 3 }, { m: 'May', n: 4 }, { m: 'June', n: 5 },
+        //{ m: 'July', n: 6 }, { m: 'August', n: 7 }, { m: 'September', n: 7 }, { m: 'October', n: 8 }, { m: 'November', n: 10 }, { m: 'December', n: 11 }];
+        function initCal() {
+            main_date = new Date;
+            current_date = new Date;
+            updateCal();
+        }
+
+        function updateCal() {
+            let month_list = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            let month = document.getElementById("month");
+            month.innerHTML = month_list[current_date.getMonth()];
+            if (
+                current_date.getMonth() === main_date.getMonth() &&
+                current_date.getFullYear() === main_date.getFullYear()
+            )
+                month.classList.add("main");
+            else
+                month.classList.remove("main");
+
+            let year = document.getElementById("year");
+            year.innerHTML = current_date.getFullYear();
+            if (current_date.getFullYear() === main_date.getFullYear())
+                year.classList.add("main");
+            else
+                year.classList.remove("main");
+            let tmp_date = new Date;
+            tmp_date.setMonth(current_date.getMonth());
+            tmp_date.setFullYear(current_date.getFullYear());
+            tmp_date.setDate(1);
+            let first_day = -((tmp_date.getDay() + 6) % 7) + 1;
+            let id_list = document.getElementById("calendar").children[0];
+            let flag = true;
+            for (let i = 1; i < 6; ++i) {
+                for (let j = 0; j < 7; ++j) {
+                    tmp_date.setDate(first_day);
+                    let pos = tmp_date.getDate();
+
+                    if (pos === 1) {
+                        flag = !flag;
+                        first_day = 1;
+                        tmp_date.setMonth(tmp_date.getMonth() + 1);
+                    }
+
+                    if (flag)
+                        id_list.rows[i].cells[j].classList.add("out");
+                    else
+                        id_list.rows[i].cells[j].classList.remove("out");
+
+                    if (
+                        tmp_date.getMonth() === main_date.getMonth() &&
+                        tmp_date.getFullYear() === main_date.getFullYear() &&
+                        pos === main_date.getDate()
+                    )
+                        id_list.rows[i].cells[j].classList.add("main");
+                    else
+                        id_list.rows[i].cells[j].classList.remove("main");
+
+                    id_list.rows[i].cells[j].innerHTML = pos;
+                    ++first_day;
+                }
+            }
+        }
+
+        function monthNext() {
+            current_date.setMonth(current_date.getMonth() + 1);
+            updateCal()
+        }
+
+        function monthPrev() {
+            current_date.setMonth(current_date.getMonth() - 1);
+            updateCal()
+        }
+
+        function yearSet() {
+
+        }
+
+        function monthSet() {
+
+        }
+    </script>
+</head>
+
+<body onload="initCal();">
+    <br><br><br><br>
+    <ul class="list">
+        <li class="option">
+            <a class="option" id="year">Красноярский край</a>
+            <ul class="selection">
+                <li><a>Минусинск</a></li>
+                <li><a>Ачинск</a></li>
+                <li><a>Красноярск</a></li>
+                <li><a>Железногорск</a></li>
+                <li><a>Канск</a></li>
+                <li><a>Норильск</a></li>
+            </ul>
+        </li>
+
+        <li class="option">
+            <a class="option" id="month">Свердловская область</a>
+            <ul class="selection">
+                <li><a>Екатеринбург</a></li>
+                <li><a>Верхняя Пышма</a></li>
+                <li><a>Нижний Тагил</a></li>
+                <li><a>Первоуральск</a></li>
+                <li><a>Асбест</a></li>
+                <li><a>Каменск-Уральский</a></li>
+            </ul>
+        </li>
+    </ul>
+    <button type="button" class="button" onclick="monthPrev();">&#8249;</button>
+    <button type="button" class="button" onclick="monthNext();">&#8250;</button>
+    <table id="calendar">
+        <tr>
+            <td>Пн</td>
+            <td>Вт</td>
+            <td>Ср</td>
+            <td>Чт</td>
+            <td>Пт</td>
+            <td>Сб</td>
+            <td>Вс</td>
+        </tr>
+        <tr>
+            <td id="00" class="day">0</td>
+            <td id="01" class="day">1</td>
+            <td id="02" class="day">2</td>
+            <td id="03" class="day">3</td>
+            <td id="04" class="day">4</td>
+            <td id="05" class="day">5</td>
+            <td id="06" class="day">6</td>
+        </tr>
+        <tr>
+            <td id="10" class="day">0</td>
+            <td id="11" class="day">1</td>
+            <td id="12" class="day">2</td>
+            <td id="13" class="day">3</td>
+            <td id="14" class="day">4</td>
+            <td id="15" class="day">5</td>
+            <td id="16" class="day">6</td>
+        </tr>
+        <tr>
+            <td id="20" class="day"></td>
+            <td id="21" class="day"></td>
+            <td id="22" class="day"></td>
+            <td id="23" class="day"></td>
+            <td id="24" class="day"></td>
+            <td id="25" class="day"></td>
+            <td id="26" class="day"></td>
+        </tr>
+        <tr>
+            <td id="30" class="day"></td>
+            <td id="31" class="day"></td>
+            <td id="32" class="day"></td>
+            <td id="33" class="day"></td>
+            <td id="34" class="day"></td>
+            <td id="35" class="day"></td>
+            <td id="36" class="day"></td>
+        </tr>
+        <tr>
+            <td id="40" class="day"></td>
+            <td id="41" class="day"></td>
+            <td id="42" class="day"></td>
+            <td id="43" class="day"></td>
+            <td id="44" class="day"></td>
+            <td id="45" class="day"></td>
+            <td id="46" class="day"></td>
+        </tr>
+    </table>
+</body>
+
+</html>
