@@ -9,7 +9,7 @@
             return new Promise(resolve => {
                 let fetchURL = "input.txt";
                 let input = document.getElementById("input");
-                window.fetch(input)
+                window.fetch(fetchURL)
                     .then(response => {
                         return response.text();
                     })
@@ -40,19 +40,19 @@
                             }
                             ++i;
                         }
-                        ++i;
-                        k = parseInt(k);
-                        N = parseInt(N);
-                        for (let n = 0; n < N; ++n) {
-                            let target = str.substr(i, k);
-                            let pos = i;
-                            let j = 0;
-                            while ((pos = str.indexOf(target, pos + k)) != -1) {
-                                j++;
-                            }
-                            if (j === 1) alert(target);
-                        }
 
+                    }
+                    ++i;
+                    k = parseInt(k);
+                    N = parseInt(N);
+                    for (let n = 0; n < N; ++n) {
+                        let target = str.substr(i, k);
+                        let pos = i;
+                        let j = 0;
+                        while ((pos = str.indexOf(target, pos + k)) != -1) {
+                            j++;
+                        }
+                        if (j === 1) alert(target);
                     }
                 })
         }
