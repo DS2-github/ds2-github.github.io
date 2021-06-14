@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <tittle> Quiz0 </tittle>
+    <script>
+        async function startFetchAsync() {
+            return new Promise(resolve => {
+                let fetchURL = "input.txt";
+                let input = document.getElementById("input");
+                window.fetch(input)
+                    .then(response => {
+                        return response.text();
+                    })
+                    .then(text => {
+                        input.innerText = text;
+                        resolve(text);
+                    })
+            })
+        }
+        function Quiz0() {
+            startFetchAsync()
+                .then(text => {
+                    let str = text;
+                    let i = 0;
+                    let N = '';
+                    let k = '';
+                    let Nfl = true;
+                    while (str[i] !== '\n') {
+                        if (str[i] >= '0' && str[i] <= '9' && Nfl) {
+                            N = N + str[i];
+                            if (str[i] === ' ') {
+                                Nfl = false;
+                            }
+                        }
+                        if (!Nfl) {
+                            if (str[i] >= '0' && str[i] <= '9' && Nfl) {
+                                k = k + str[i];
+                            }
+                            ++i;
+                        }
+                        ++i;
+                        k = parseInt(k);
+                        N = parseInt(N);
+                        for (let n = 0; n < N; ++n) {
+                            let target = str.substr(i, k);
+                            let pos = i;
+                            let j = 0;
+                            while ((pos = str.indexOf(target, pos + k)) != -1) {
+                                j++;
+                            }
+                            if (j === 1) alert(target);
+                        }
+
+                    }
+                })
+        }
+    </script>
+</head>
+
+<body onload="Quiz0();">
+    <a id="input"> </a>
+</body>
+
+</html>
