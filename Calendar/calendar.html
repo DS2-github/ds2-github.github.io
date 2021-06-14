@@ -146,8 +146,9 @@
                 <li class="yr" id="y0" onclick="yearSet(2025);"></li>
                 <li class="yr" id="y0" onclick="yearNext();">&#8250;</li>
             </ul>
+        <li class="option">
+            <button type="button" class="button" onclick="monthPrev();">&#8249;</button>
         </li>
-
         <li class="option">
             <a class="mnth" id="month"></a>
             <ul class="selection" id="mnt">
@@ -165,11 +166,13 @@
                 <li class="mnth" id="m11" onclick="monthSet(11);"></li>
             </ul>
         </li>
+        <li class="option">
+            <button type="button" class="button" onclick="monthNext();">&#8250;</button>
+        </li>
     </ul>
-    <button type="button" class="button" onclick="monthPrev();">&#8249;</button>
-    <button type="button" class="button" onclick="monthNext();">&#8250;</button>
+    <br><br>
     <table id="calendar">
-        <tr>
+        <tr class="week">
             <td>Пн</td>
             <td>Вт</td>
             <td>Ср</td>
