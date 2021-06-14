@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <tittle> My projects </tittle>
+    <script type="text/javascript">
+        function sendMessage() {
+            let msg = { name: document.getElementById("name").value, message: document.getElementById("message").value };
+            try {
+                fetch("/", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json;charset=utf-8' },
+                    body: JSON.stringify(msg)
+                })
+            } catch {
+                alert("Error in send function");
+            }
+        }
+        function loadMsg() {
+            fetch("/db", { method: 'GET' })
+                .then(response => {
+                    return response.text();
+                })
+                .then(text => {
+                    let txt = document.getElementById("field");
+                    let strings = text.split(";");
+                    txt.innerHTML = '';
+                    for (let str of strings) {
+                        if (str !== "") {
+                            let result = JSON.parse(str);
+                            txt.innerHTML += `${result.name}:${result.message}<br>`;
+                        }
+                    }
+                    tick();
+                })
+        }
+        function tick() {
+            setTimeout(loadMsg(), 500);
+        }
+    </script>
+</head>
+
+
+<body onload="tick();">
+    <label for="name">name</label> <input type="text" id="name"><br>
+    <label for="message">message</label> <input type="text" id="message"><br>
+    <button onclick="sendMessage();">Send message</button>
+    <p id="field"></p>
+</body>
+
+</html>
