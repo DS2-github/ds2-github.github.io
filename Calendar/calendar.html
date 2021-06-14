@@ -8,9 +8,11 @@
     <script type="text/javascript">
         var current_date;
         var main_date;
+        var year_shift;
         //var month_list = [{ m: 'January', n: 0 }, { m: 'February', n: 1 }, { m: 'March', n: 2 }, { m: 'April', n: 3 }, { m: 'May', n: 4 }, { m: 'June', n: 5 },
         //{ m: 'July', n: 6 }, { m: 'August', n: 7 }, { m: 'September', n: 7 }, { m: 'October', n: 8 }, { m: 'November', n: 10 }, { m: 'December', n: 11 }];
         function initCal() {
+            year_shift = 0;
             main_date = new Date;
             current_date = new Date;
             updateCal();
@@ -84,9 +86,9 @@
             }
 
             let yrr = document.getElementById("yrr").children;
-            for (let i = 0; i < 16; ++i) {
-                yrr[i].innerHTML = 2015 + i;
-                if (2015 + i === main_date.getFullYear())
+            for (let i = 1; i < 11; ++i) {
+                yrr[i].innerHTML = 2015 + i + year_shift;
+                if (2015 + i + year_shift === main_date.getFullYear())
                     yrr[i].classList.add("main");
                 else
                     yrr[i].classList.remove("main");
@@ -103,8 +105,18 @@
             updateCal();
         }
 
+        function yearNext() {
+            year_shift += 10;
+            updateCal();
+        }
+
+        function yearPrev() {
+            year_shift -= 10;
+            updateCal();
+        }
+
         function yearSet(y) {
-            current_date.setFullYear(y);
+            current_date.setFullYear(y + year_shift);
             updateCal();
         }
 
@@ -121,7 +133,7 @@
         <li class="option">
             <a class="yr" id="year"></a>
             <ul class="selection" id="yrr">
-                <li class="yr" id="y0" onclick="yearSet(2015);"></li>
+                <li class="yr" id="y0" onclick="yearPrev();">&#8249;</li>
                 <li class="yr" id="y0" onclick="yearSet(2016);"></li>
                 <li class="yr" id="y0" onclick="yearSet(2017);"></li>
                 <li class="yr" id="y0" onclick="yearSet(2018);"></li>
@@ -132,11 +144,7 @@
                 <li class="yr" id="y0" onclick="yearSet(2023);"></li>
                 <li class="yr" id="y0" onclick="yearSet(2024);"></li>
                 <li class="yr" id="y0" onclick="yearSet(2025);"></li>
-                <li class="yr" id="y0" onclick="yearSet(2026);"></li>
-                <li class="yr" id="y0" onclick="yearSet(2027);"></li>
-                <li class="yr" id="y0" onclick="yearSet(2028);"></li>
-                <li class="yr" id="y0" onclick="yearSet(2029);"></li>
-                <li class="yr" id="y0" onclick="yearSet(2030);"></li>
+                <li class="yr" id="y0" onclick="yearNext();">&#8250;</li>
             </ul>
         </li>
 

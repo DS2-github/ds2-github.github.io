@@ -124,6 +124,7 @@ ul.list, ul.selection {
     list-style-type: none;
 }
 ul.selection {
+    background-color: whitesmoke;
     left: -9999px;
     position: absolute;
 }
