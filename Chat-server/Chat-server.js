@@ -5,6 +5,7 @@ const host = 'localhost';
 const port = 8000;
 
 let messageLIST = [];
+let dataBase = [];
 
 const requestListener = function (req, res) {
     console.log(
@@ -23,19 +24,20 @@ const requestListener = function (req, res) {
             data += chunk;
         })
         req.on('end', () => {
-            messageLIST.push(JSON.parse(data))
+            dataBase.push(JSON.parse(data));
+            messageLIST.push(JSON.parse(data));
             res.end();
         })
         return;
     } else if (req.url === "/db" && req.method === 'GET') {
         let str = "";
-        for (let msg of messageLIST) {
+        let msg;
+        while ((msg = messageLIST.shift()) != null) {
             str = str + JSON.stringify(msg) + ';';
         }
         res.writeHead(200);
         res.end(str);
-        return;
-        //res.end(getMessages());
+        return;;
     }
     if (req.url === "/") {
         fileName = "index.html";
@@ -65,7 +67,7 @@ const requestListener = function (req, res) {
 
 function getMessages() {
     let msgDB = [];
-    for (let msg of messageLIST) {
+    for (let msg of dataBase) {
         msgDB.push(msg);
     }
 }

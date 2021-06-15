@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <tittle> My projects </tittle>
+    <tittle> Messager </tittle>
+    <link rel="stylesheet" href="styles.css">
     <script type="text/javascript">
         function sendMessage() {
             let msg = { name: document.getElementById("name").value, message: document.getElementById("message").value };
@@ -23,13 +24,12 @@
                     return response.text();
                 })
                 .then(text => {
-                    let txt = document.getElementById("field");
+                    let tbl = document.getElementById("msgwnd");
                     let strings = text.split(";");
-                    txt.innerHTML = '';
                     for (let str of strings) {
                         if (str !== "") {
                             let result = JSON.parse(str);
-                            txt.innerHTML += `${result.name}:${result.message}<br>`;
+                            tbl.insertAdjacentHTML('beforeend', `<tr><td class="name">${result.name}:</td><td class="msgsss">${result.message}</td></tr>`);
                         }
                     }
                     tick();
@@ -43,10 +43,16 @@
 
 
 <body onload="tick();">
-    <label for="name">name</label> <input type="text" id="name"><br>
-    <label for="message">message</label> <input type="text" id="message"><br>
-    <button onclick="sendMessage();">Send message</button>
-    <p id="field"></p>
+    <div>
+        <table id="msgwnd">
+            <tr>
+                <td><label for="name" class="send">Name</label> <input type="text" id="name"></td>
+                <td><label for="message" class="send">Message</label> <input type="text" id="message">
+                    <button onclick="sendMessage();" class="send">&#8250;</button>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 
 </html>
