@@ -62,7 +62,6 @@ button {
 
 .anim {
     transition: 0.3s; /*Скорость перехода состояния элемента*/
-    animation-timing-function: cubic-bezier();
     animation: show 0.5s 1; /* Указываем название анимации, её время и количество повторов*/
     animation-fill-mode: forwards; /* Чтобы элемент оставался в конечном состоянии анимации */
 }
