@@ -11,9 +11,6 @@ const requestListener = function (req, res) {
     console.log(
         `Request: ${req.method}, ${req.url}`
     );
-    console.log(
-        `Request headers: ${JSON.stringify(req.headers)}`
-    );
 
     let fileName;
     let contentType;
@@ -37,11 +34,13 @@ const requestListener = function (req, res) {
         }
         res.writeHead(200);
         res.end(str);
-        return;;
+        return;
     }
     if (req.url === "/") {
         fileName = "index.html";
         contentType = "text/html";
+        for (let msg of dataBase)
+            messageLIST.push(msg);
     }
     else if (req.url.endsWith(".css")) {
         fileName = req.url.substr(1);
@@ -64,13 +63,6 @@ const requestListener = function (req, res) {
             return;
         });
 };
-
-function getMessages() {
-    let msgDB = [];
-    for (let msg of dataBase) {
-        msgDB.push(msg);
-    }
-}
 
 const server = http.createServer(requestListener);
 server.listen(port, host, () => {
