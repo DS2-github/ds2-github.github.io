@@ -1,0 +1,83 @@
+.chatblock {
+    width: 40vw;
+    background: rgb(255, 255, 255);
+    border-spacing: 0px;
+    height: 60vh;
+    margin: 5% auto;
+    margin-bottom: 0;
+    border: 1px solid #C1C1C1; 
+    overflow-y: scroll; /* прокрутка по вертикали */
+    overflow-x:hidden;
+    display: block;
+    flex-basis: auto;
+    flex-direction: column-reverse;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+button {
+    text-decoration: none;
+    border-radius: 25%;
+    padding: 4px 20px;
+    color: black;
+    border-style: none;
+    background-color: #dfdfdf;
+}
+
+.send {
+    width: 40vw;
+    background: #7affb6;
+    height: auto;
+    margin: 5% auto;
+    margin-top: 0;
+    border: 1px solid #C1C1C1; 
+}
+
+.namefield {
+    display:table-cell;
+    width: 25%;
+}
+.namefield input {
+    width: 60%;
+}
+
+.messagefield {
+    display:table-cell;
+    width: 80%;
+}
+.messagefield input {
+    width: 70%;
+}
+
+.name {
+    color: blueviolet;
+}
+
+.msg {
+    color: black;
+}
+
+.anim {
+    transition: 0.3s; /*Скорость перехода состояния элемента*/
+    animation: show 0.5s 1; /* Указываем название анимации, её время и количество повторов*/
+    animation-fill-mode: forwards; /* Чтобы элемент оставался в конечном состоянии анимации */
+}
+
+@keyframes show{
+    0%{
+        transform: scaleX(0.4);
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+sss
+tr {
+    height: 32px;
+}
+
+td {
+    display: inline-block;
+    font-size: 16px;
+}
