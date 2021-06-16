@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>quiz2</title>
+    <script type"text/javascript">
+        let mas = [];
+
+        function ok() {
+            let tmp = document.getElementById("input").value.split(' ');
+            tmp.forEach(x => {
+                let n = parseInt(x);
+                if (n.toString() != 'NaN') {
+                    mas.push(n + 1);
+                }
+            });
+            let size = mas.length;
+
+            mas.forEach(x => {
+                n = Math.abs(x);
+                if (n - 1 < size) {
+                    mas[n - 1] = -mas[n - 1];
+                }
+            });
+
+            for (let i = 0; i < size; ++i) {
+                if (mas[i] > 0) {
+                    document.getElementById("res").innerHTML = i.toString();
+                    return;
+                }
+            }
+
+            document.getElementById("res").innerHTML = size.toString();
+            return;
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" id="input"></input> <a id="res"></a><br>
+    <button onclick="ok();"> Ok </button>
+</body>
+
+</html>

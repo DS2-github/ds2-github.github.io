@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Socket.IO chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    let socket = io();
+    function set_cookie(name, value, exp_y, exp_m, exp_d) {
+      let cookie_string = name + "=" + escape(value);
+
+      if (exp_y) {
+        var expires = new Date(exp_y, exp_m, exp_d);
+        cookie_string += "; expires=" + expires.toGMTString();
+      }
+      document.cookie = cookie_string;
+    }
+    function regUser() {
+      let data = { login: document.getElementById('login').value, password: document.getElementById('password').value };
+      socket.emit('setUsrename', data);
+    }
+    socket.on('usernameOccupied', response => {
+      alert(response);
+    });
+    socket.on('registerUser', response => {
+      let current_date = new Date;
+      let cookie_year = current_date.getFullYear() + 1;
+      let cookie_month = current_date.getMonth();
+      let cookie_day = current_date.getDate();
+      set_cookie("chatUser", document.getElementById('login').value, cookie_year, cookie_month, cookie_day);
+      document.location = 'chat.html';
+    });
+    function runReact(event) {
+      if (event.keyCode === 13 || event.which == 13) regUser();
+    }
+  </script>
+</head>
+
+<body>
+  <label for="login">login</label> <input type="text" id="login" onkeypress="runReact(event);">
+  <label for="password">password</label> <input type="text" id="password" onkeypress="runReact(event);">
+  <button onclick="regUser();">&#8250;</button>
+</body>
+
+</html>

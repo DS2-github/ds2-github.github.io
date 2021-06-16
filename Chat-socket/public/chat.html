@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        let socket = io();
+
+        let chatUsename;
+
+        function checkOldFriends() {
+            let name = 'chatUser';
+            let matches = document.cookie.match(new RegExp(
+                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            chatUsename = matches ? decodeURIComponent(matches[1]) : "";
+        }
+        function sendMessage() {
+            let msg = { username: chatUsename, message: document.getElementById("message").value };
+            if (msg.message == "") return;
+            socket.emit('sendMessage', msg);
+            document.getElementById("message").value = "";
+        }
+        socket.on('getMessage', msg => {
+            let tbl = document.getElementById("msgwnd");
+            tbl.insertAdjacentHTML('beforeend', `<tr class="anim"><td class="name">${msg.username}:</td><td class="msg">${msg.message}</td></tr>`);
+            tbl.lastChild.scrollIntoView(false);
+        });
+        function runReact(event) {
+            if (event.keyCode === 13 || event.which == 13) sendMessage();
+        }
+        function recoveryRequest() {
+            socket.emit('requesRrecovery', 'code:30');
+            checkOldFriends();
+        }
+        socket.on('receiveRecovery', recDATA => {
+            let tbl = document.getElementById("msgwnd");
+            tbl.innerHTML = "";
+            for (let msg of recDATA) {
+                tbl.insertAdjacentHTML('beforeend', `<tr class="anim"><td class="name">${msg.username}:</td><td class="msg">${msg.message}</td></tr>`);
+                tbl.lastChild.scrollIntoView(false);
+            }
+        });
+    </script>
+</head>
+
+<body onload="recoveryRequest();">
+    <div class="chatblock">
+        <table id="msgwnd">
+        </table>
+    </div>
+    <div class="send">
+        <input type="text" id="message" onkeypress="runReact(event);">
+        <button onclick="sendMessage();">&#8250;</button>
+    </div>
+</body>
+
+</html>
