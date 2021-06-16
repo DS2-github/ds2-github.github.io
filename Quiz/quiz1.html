@@ -1,1 +1,55 @@
-просто проксорить
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>quiz1</title>
+    <script type"text/javascript">
+        let mas = [];
+
+        function pow2(x) {
+            let a = 1;
+            for (let j = 0; j < x; j++) {
+                a *= 2;
+            };
+            return a
+
+        }
+        function d2t(x) {
+            let res = "";
+            while (x > 0) {
+                res = `${x % 2}` + res;
+                x = (x - x % 2) / 2;
+            }
+            return res;
+        }
+        function parse(x) {
+            let res = 0;
+            for (let i = x.length - 1; i >= 0; i--) {
+                res += x[i] * pow2(i);
+            }
+            return res;
+        }
+        function ok() {
+            let tmp = document.getElementById("input").value.split(' ');
+            let N = parseInt(tmp.shift());
+            let k = parseInt(tmp.shift());
+            tmp.forEach(x => {
+                mas.push(parse(x));
+            })
+            let res = 0;
+            for (let x of mas) {
+                res ^= x;
+            };
+            res = d2t(res);
+            document.getElementById("res").innerHTML = res;
+            return;
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" id="input"></input> <a id="res"></a><br>
+    <button onclick="ok();"> Ok </button>
+</body>
+
+</html>
